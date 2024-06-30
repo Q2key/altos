@@ -1,0 +1,16 @@
+version: '3.8'
+name: altos
+services:
+  altos-postgres:
+    image: postgres:15.2-alpine
+    restart: always
+    build: ./database
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5436:5432'
+
+volumes:
+  alto-postgres:
+    driver: local

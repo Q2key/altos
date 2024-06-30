@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="73100317-f3f3-415a-b15f-0970fb221d87" name="alto@localhost:5438(nest) (DDL) Mapping">
+      <data-sources ddl="db6b74e7-3e28-4b71-9648-fdb3bd864f82" />
+      <scope>
+        <node kind="database" negative="1" />
+      </scope>
+    </mapping>
+  </component>
+</project>
