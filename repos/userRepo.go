@@ -20,6 +20,10 @@ func (repo *UserDbRepository) GetAll() []entities.User {
 
 	users := make([]entities.User, 0)
 	for rows.Next() {
+		if rows.Err() != nil {
+			log.Println("Log error:", rows.Err().Error())
+		}
+
 		var user entities.User
 		if err := rows.Scan(&user.FirstName, &user.LastName); err != nil {
 			log.Println(err.Error())

@@ -1,8 +1,8 @@
 package main
 
 import (
+	"altos/api"
 	"altos/datasource"
-	"altos/handlers"
 	"altos/repos"
 	"altos/services"
 	"fmt"
@@ -15,7 +15,8 @@ func main() {
 	userRepository := repos.NewUserPGRepo(dataSource)
 	getUsersService := services.NewGetUsersService(userRepository)
 
-	http.HandleFunc("/users", handlers.MakeUsersHandler(getUsersService))
+	http.HandleFunc("/health", api.Health)
+	http.HandleFunc("/users", api.MakeUsersHandler(getUsersService))
 
 	port := 8090
 	url := "localhost"
