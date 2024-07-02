@@ -1,45 +1,34 @@
 package main
 
 import (
+	"altos/datasource"
 	"altos/handlers"
 	"altos/repos"
-	"database/sql"
+	"altos/services"
 	"fmt"
-	_ "github.com/lib/pq"
+	"net"
 	"net/http"
 )
 
-func initDataSource() *sql.DB {
-	const (
-		host     = "localhost"
-		port     = 5436
-		user     = "postgres"
-		password = "postgres"
-		dbname   = "alto"
-	)
+func main() {
+	dataSource := datasource.InitDataSource()
+	userRepository := repos.NewUserPGRepo(dataSource)
+	getUsersService := services.NewGetUsersService(userRepository)
 
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
+	http.HandleFunc("/users", handlers.MakeUsersHandler(getUsersService))
+
+	port := 8090
+	url := "localhost"
+	address := fmt.Sprintf("%s:%d", url, port)
+
+	l, err := net.Listen("tcp", address)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 
-	defer db.Close()
-
-	return db
-}
-
-func main() {
-	ds := initDataSource()
-	userRepo := repos.NewUserRepo(ds)
-
-	http.HandleFunc("/users", handlers.MakeGetUserHandler(userRepo))
-
-	fmt.Println("Listening on port: 8090")
-	err := http.ListenAndServe(":8090", nil)
+	fmt.Printf("Listening on port %s ", address)
+	err = http.Serve(l, nil)
 	if err != nil {
-		return
+		fmt.Println(err)
 	}
 }
