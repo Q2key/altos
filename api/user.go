@@ -18,12 +18,3 @@ func MakeUsersHandler(userService contracts.GetUserService) func(w http.Response
 		}
 	}
 }
-
-func Health(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	err := json.NewEncoder(w).Encode(map[string]bool{"ok": true})
-	if err != nil {
-		return
-	}
-}

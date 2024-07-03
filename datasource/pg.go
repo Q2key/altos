@@ -1,12 +1,13 @@
 package datasource
 
 import (
+	"altos/config"
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
 )
 
-func InitDataSource() *sql.DB {
+func InitDataSource(config *config.Config) *sql.DB {
 	const (
 		host     = "localhost"
 		port     = 5436
