@@ -2,6 +2,12 @@ package contracts
 
 import "altos/entities"
 
-type GetUserService interface {
-	Execute() []entities.User
+type GetUserServiceInput struct {
+	where map[string]interface{}
+}
+
+type GetUserServiceOutput []entities.User
+
+type GetUsersService interface {
+	Execute(input *GetUserServiceInput) *[]entities.User
 }

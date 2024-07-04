@@ -9,12 +9,13 @@ type GetUsersService struct {
 	userRepository contracts.UserRepository
 }
 
-func NewGetUsersService(r contracts.UserRepository) contracts.GetUserService {
+func NewGetUsersService(r contracts.UserRepository) contracts.GetUsersService {
 	return &GetUsersService{
 		r,
 	}
+
 }
 
-func (service *GetUsersService) Execute() []entities.User {
+func (service *GetUsersService) Execute(input *contracts.GetUserServiceInput) *[]entities.User {
 	return service.userRepository.GetAll()
 }

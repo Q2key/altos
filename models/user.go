@@ -24,7 +24,7 @@ type User struct {
 	FirstName string `json:"first_name,omitempty"`
 
 	// id
-	ID int64 `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	// last name
 	LastName string `json:"last_name,omitempty"`

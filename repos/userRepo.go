@@ -11,8 +11,8 @@ type UserDbRepository struct {
 	DB *sql.DB
 }
 
-func (repo *UserDbRepository) GetAll() []entities.User {
-	sqlStatement := `SELECT u."firstName" FirstName, u."lastName" LastName FROM public."user" u`
+func (repo *UserDbRepository) GetAll() *[]entities.User {
+	sqlStatement := `SELECT u.id as Id,  u."firstName" as FirstName, u."lastName" as LastName, u.email as Email FROM public."user" as u`
 	rows, err := repo.DB.Query(sqlStatement)
 	if err != nil {
 		panic(err)
@@ -25,15 +25,17 @@ func (repo *UserDbRepository) GetAll() []entities.User {
 		}
 
 		var user entities.User
-		if err := rows.Scan(&user.FirstName, &user.LastName); err != nil {
+		if err := rows.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email); err != nil {
 			log.Println(err.Error())
 		}
 		users = append(users, user)
 	}
 
-	log.Println(users)
+	return &users
+}
 
-	return users
+func (repo *UserDbRepository) Create(user *entities.User) *entities.User {
+	return &entities.User{FirstName: "FirstName-1", LastName: "lastName-1"}
 }
 
 func NewUserPGRepo(db *sql.DB) contracts.UserRepository {

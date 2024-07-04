@@ -19,7 +19,8 @@ var (
 func init() {
 	SwaggerJSON = json.RawMessage([]byte(`{
   "schemes": [
-    "http"
+    "http",
+    "https"
   ],
   "swagger": "2.0",
   "info": {
@@ -28,7 +29,7 @@ func init() {
     "version": "1.0.0"
   },
   "host": "localhost:9091",
-  "basePath": "/v1",
+  "basePath": "/",
   "paths": {
     "/users": {
       "get": {
@@ -76,8 +77,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         },
         "last_name": {
           "type": "string"
@@ -88,7 +88,8 @@ func init() {
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
   "schemes": [
-    "http"
+    "http",
+    "https"
   ],
   "swagger": "2.0",
   "info": {
@@ -97,7 +98,7 @@ func init() {
     "version": "1.0.0"
   },
   "host": "localhost:9091",
-  "basePath": "/v1",
+  "basePath": "/",
   "paths": {
     "/users": {
       "get": {
@@ -145,8 +146,7 @@ func init() {
           "type": "string"
         },
         "id": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         },
         "last_name": {
           "type": "string"

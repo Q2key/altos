@@ -6,14 +6,15 @@ import (
 	"altos/config"
 	"altos/contracts"
 	"altos/datasource"
-	"altos/models"
+	"altos/mappers"
 	"altos/repos"
 	"altos/services"
 	"crypto/tls"
+	"github.com/go-openapi/runtime"
+	"github.com/rs/cors"
 	"net/http"
 
 	"github.com/go-openapi/errors"
-	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
 	"altos/restapi/operations"
@@ -37,17 +38,17 @@ func configureAPI(api *operations.UserAPIAPI) http.Handler {
 
 	api.UseSwaggerUI()
 	// To continue using redoc as your UI, uncomment the following line
-	// api.UseRedoc()
+	api.UseRedoc()
 
 	api.JSONConsumer = runtime.JSONConsumer()
 
 	api.JSONProducer = runtime.JSONProducer()
-
-	if api.GetUsersHandler == nil {
-		api.GetUsersHandler = operations.GetUsersHandlerFunc(func(params operations.GetUsersParams) middleware.Responder {
-			return middleware.NotImplemented("operation operations.GetUsers has not yet been implemented")
-		})
-	}
+	//
+	//if api.GetUsersHandler == nil {
+	//	api.GetUsersHandler = operations.GetUsersHandlerFunc(func(params operations.GetUsersParams) middleware.Responder {
+	//		return middleware.NotImplemented("operation operations.GetUsers has not yet been implemented")
+	//	})
+	//}
 
 	// Composition Root. Init application
 	cfg := config.NewConfig()
@@ -57,19 +58,13 @@ func configureAPI(api *operations.UserAPIAPI) http.Handler {
 	//
 
 	api.GetUsersHandler = operations.GetUsersHandlerFunc(func(params operations.GetUsersParams) middleware.Responder {
-		serviceOutput := getUsersService.Execute()
-		usersResponse := make([]*models.User, 0)
-		for i := 0; i < len(serviceOutput); i++ {
-			u := serviceOutput[i]
-			usersResponse = append(usersResponse, contracts.NewGetUsersApiResponseDTO(u))
-		}
-		return operations.NewGetUsersOK().WithPayload(usersResponse)
+		users := getUsersService.Execute(&contracts.GetUserServiceInput{})
+		usersDTO := mappers.NewGetUsersDTO(users)
+		return operations.NewGetUsersOK().WithPayload(usersDTO.ToApiResponseDTO())
 	})
 
 	api.PreServerShutdown = func() {}
-
 	api.ServerShutdown = func() {}
-
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))
 }
 
@@ -94,5 +89,8 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics.
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
-	return handler
+
+	handleCORS := cors.Default().Handler
+
+	return handleCORS(handler)
 }

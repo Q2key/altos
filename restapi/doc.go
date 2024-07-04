@@ -5,8 +5,9 @@
 //	API for retrieving user data
 //	Schemes:
 //	  http
+//	  https
 //	Host: localhost:9091
-//	BasePath: /v1
+//	BasePath: /
 //	Version: 1.0.0
 //
 //	Consumes:
