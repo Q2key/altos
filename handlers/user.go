@@ -1,4 +1,4 @@
-package api
+package handlers
 
 import (
 	"altos/contracts"
@@ -26,7 +26,6 @@ func EnableCors(w *http.ResponseWriter) {
 }
 
 func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
-
 	EnableCors(&w)
 	users := h.getUsersService.Execute(&contracts.GetUserServiceInput{})
 	w.Header().Set("Content-Type", "application/json")
@@ -37,7 +36,12 @@ func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *UserHandler) Ping(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "pong"})
+}
+
+func (h *UserHandler) Health(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"message": "pong"})
 }

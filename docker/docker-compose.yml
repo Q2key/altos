@@ -12,7 +12,7 @@ services:
       - '5436:5432'
   swagger:
     image: quay.io/goswagger/swagger
-#    build: ./docker
+    build: ./docker
     restart: no
 
 volumes:

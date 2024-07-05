@@ -1,9 +1,9 @@
 package main
 
 import (
-	"altos/api"
 	"altos/config"
 	"altos/datasource"
+	"altos/handlers"
 	"altos/repos"
 	"altos/services"
 	"fmt"
@@ -12,16 +12,19 @@ import (
 )
 
 func main() {
+
 	cfg := config.NewConfig()
+
 	dataSource := datasource.InitDataSource(cfg)
 	userRepository := repos.NewUserPGRepo(dataSource)
 	getUsersService := services.NewGetUsersService(userRepository)
-	usersHandler := api.NewUserHandler(getUsersService)
+	usersHandler := handlers.NewUserHandler(getUsersService)
 
 	address := fmt.Sprintf("%s:%s", cfg.ServerHost, cfg.ServerPort)
 
-	http.HandleFunc("/ping", usersHandler.Ping)
+	http.HandleFunc("/health", usersHandler.Health)
 	http.HandleFunc("/users", usersHandler.GetUsers)
+	http.HandleFunc("/create", usersHandler.CreateUser)
 
 	l, err := net.Listen("tcp", address)
 	if err != nil {
