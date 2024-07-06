@@ -8,7 +8,7 @@ import (
 type UserJsonRepository struct {
 }
 
-func (repo *UserJsonRepository) GetAll() *[]entities.User {
+func (r *UserJsonRepository) GetAll() *[]entities.User {
 	return &[]entities.User{
 		{FirstName: "FirstName-1", LastName: "lastName-1"},
 		{FirstName: "FirstName-2", LastName: "LastName-2"},
@@ -16,16 +16,16 @@ func (repo *UserJsonRepository) GetAll() *[]entities.User {
 	}
 }
 
-func (repo *UserJsonRepository) Create(user *entities.User) *entities.User {
+func (r *UserJsonRepository) Create(user *entities.User) *entities.User {
 	return &entities.User{FirstName: "FirstName-1", LastName: "lastName-1"}
 }
 
-func (repo *UserJsonRepository) GetOne(id string) *entities.User {
+func (r *UserJsonRepository) Update(user *entities.User) *entities.User {
 	return &entities.User{FirstName: "FirstName-1", LastName: "lastName-1"}
 }
 
-func (repo *UserJsonRepository) DeleteOne(id string) bool {
-	return true
+func (r *UserJsonRepository) Delete(userId int) *entities.User {
+	return &entities.User{FirstName: "FirstName-1", LastName: "lastName-1"}
 }
 
 func NewUserJsonRepository() contracts.UserRepository {

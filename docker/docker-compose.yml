@@ -2,7 +2,6 @@ version: '3.8'
 name: altos
 services:
   altos-postgres:
-    image: postgres:15.2-alpine
     restart: always
     build: ./database
     environment:
@@ -11,9 +10,10 @@ services:
     ports:
       - '5436:5432'
   swagger:
-    image: quay.io/goswagger/swagger
-    build: ./docker
-    restart: no
+    restart: always
+    build: ./swagger
+    ports:
+      - 9999:9999
 
 volumes:
   alto-postgres:

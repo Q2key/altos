@@ -11,9 +11,9 @@ type UserDbRepository struct {
 	DB *sql.DB
 }
 
-func (repo *UserDbRepository) GetAll() *[]entities.User {
+func (r *UserDbRepository) GetAll() *[]entities.User {
 	sqlStatement := `SELECT u.id as Id,  u."firstName" as FirstName, u."lastName" as LastName, u.email as Email FROM public."user" as u`
-	rows, err := repo.DB.Query(sqlStatement)
+	rows, err := r.DB.Query(sqlStatement)
 	if err != nil {
 		panic(err)
 	}
@@ -34,7 +34,15 @@ func (repo *UserDbRepository) GetAll() *[]entities.User {
 	return &users
 }
 
-func (repo *UserDbRepository) Create(user *entities.User) *entities.User {
+func (r *UserDbRepository) Create(u *entities.User) *entities.User {
+	return &entities.User{FirstName: "FirstName-1", LastName: "lastName-1"}
+}
+
+func (r *UserDbRepository) Update(u *entities.User) *entities.User {
+	return &entities.User{FirstName: "FirstName-1", LastName: "lastName-1"}
+}
+
+func (r *UserDbRepository) Delete(userId int) *entities.User {
 	return &entities.User{FirstName: "FirstName-1", LastName: "lastName-1"}
 }
 

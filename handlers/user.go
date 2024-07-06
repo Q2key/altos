@@ -19,14 +19,7 @@ func NewUserHandler(getUsersService contracts.GetUsersService) *UserHandler {
 	}
 }
 
-func EnableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-	(*w).Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
-	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
-}
-
 func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
-	EnableCors(&w)
 	users := h.getUsersService.Execute(&contracts.GetUserServiceInput{})
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
