@@ -1,3 +1,4 @@
 /cmd/user-api-server/
 /restapi/
 /.idea/swagger-settings.xml
+.env
