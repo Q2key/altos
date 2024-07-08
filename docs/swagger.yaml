@@ -1,0 +1,32 @@
+definitions:
+  mappers.GetUsersDTO:
+    type: object
+info:
+  contact: {}
+  title: Altos API
+  version: "1.0"
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: get accounts
+      parameters:
+      - description: name search by q
+        format: email
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/mappers.GetUsersDTO'
+            type: array
+      summary: List accounts
+      tags:
+      - accounts
+swagger: "2.0"

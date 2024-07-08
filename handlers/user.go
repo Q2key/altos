@@ -19,6 +19,15 @@ func NewUserHandler(getUsersService contracts.GetUsersService) *UserHandler {
 	}
 }
 
+// GetUsers godoc
+// @Summary      List accounts
+// @Description  get accounts
+// @Tags         accounts
+// @Accept       json
+// @Produce      json
+// @Param        q    query     string  false  "name search by q"  Format(email)
+// @Success      200  {array}   mappers.GetUsersDTO
+// @Router       /users [get]
 func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	users := h.getUsersService.Execute(&contracts.GetUserServiceInput{})
 	w.Header().Set("Content-Type", "application/json")
