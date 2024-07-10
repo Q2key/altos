@@ -37,7 +37,6 @@ func main() {
 
 	http.HandleFunc("/health", usersHandler.Health)
 	http.HandleFunc("/users", usersHandler.GetUsers)
-	http.HandleFunc("/create", usersHandler.CreateUser)
 
 	l, err := net.Listen("tcp", address)
 	if err != nil {

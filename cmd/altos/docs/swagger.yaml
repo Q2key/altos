@@ -6,6 +6,10 @@ info:
   title: Altos API
   version: "1.0"
 paths:
+  /health:
+    get:
+      responses: {}
+      summary: Health check
   /users:
     get:
       consumes:

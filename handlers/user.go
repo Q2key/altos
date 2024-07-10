@@ -3,7 +3,6 @@ package handlers
 import (
 	"altos/contracts"
 	"altos/entities"
-	"encoding/json"
 	"net/http"
 )
 
@@ -30,20 +29,12 @@ func NewUserHandler(getUsersService contracts.GetUsersService) *UserHandler {
 // @Router       /users [get]
 func (h *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	users := h.getUsersService.Execute(&contracts.GetUserServiceInput{})
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	err := json.NewEncoder(w).Encode(users)
-	if err != nil {
-		return
-	}
+	WriteOKWithJson[[]entities.User](w, *users)
 }
 
-func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"message": "pong"})
-}
-
+// Health godoc
+// @Summary       Health check
+// @Router       /health [get]
 func (h *UserHandler) Health(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"message": "pong"})
+	WriteOKWithJson[map[string]string](w, map[string]string{"message": "pong"})
 }
