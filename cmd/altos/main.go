@@ -8,9 +8,11 @@ import (
 	"altos/repos"
 	"altos/services"
 	"fmt"
+	"github.com/go-chi/chi/v5"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
-	"net"
 	"net/http"
+
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 // @title Altos API
@@ -24,28 +26,25 @@ func main() {
 	dataSource := datasource.InitDataSource(cfg)
 	userRepository := repos.NewUserPGRepo(dataSource)
 	getUsersService := services.NewGetUsersService(userRepository)
-	usersHandler := handlers.NewUserHandler(getUsersService)
+	createUserService := services.NewCreateUsersService(userRepository)
+	usersHandler := handlers.NewUserHandler(getUsersService, createUserService)
 
 	address := fmt.Sprintf("%s:%s", cfg.ServerHost, cfg.ServerPort)
 
 	docs.SwaggerInfo.Host = address
 	docs.SwaggerInfo.BasePath = "/"
 
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+
 	//init swagger/swag
-	http.HandleFunc("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL(fmt.Sprintf("http://localhost:%s/swagger/doc.json", cfg.ServerPort)))) //The url pointing to API definition
+	r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL(fmt.Sprintf("http://localhost:%s/swagger/doc.json", cfg.ServerPort))))
 
-	http.HandleFunc("/health", usersHandler.Health)
-	http.HandleFunc("/users", usersHandler.GetUsers)
+	r.Get("/users", usersHandler.GetUsers)
+	r.Post("/user", usersHandler.CreateUser)
 
-	l, err := net.Listen("tcp", address)
+	err := http.ListenAndServe(address, r)
 	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Printf("Listening on port %s ", address)
-	err = http.Serve(l, nil)
-	if err != nil {
-		fmt.Println(err)
+		return
 	}
 }
